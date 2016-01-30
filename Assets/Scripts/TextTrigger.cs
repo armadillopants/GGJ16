@@ -2,16 +2,24 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class TextTrigger : TriggerObject 
+[RequireComponent(typeof(BoxCollider2D))]
+public class TextTrigger : MonoBehaviour 
 {
 	private float fadeTextTime = 3f;
 
 	public string storyText;
 	public Text textObject;
 
-	public override void OnTriggerEnter2D()
+	private bool triggered = false;
+
+	void OnTriggerEnter2D()
 	{
-		base.OnTriggerEnter2D();
+		if(triggered)
+		{
+			return;
+		}
+
+		triggered = true;
 
 		textObject.text = "";
 

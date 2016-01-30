@@ -18,11 +18,19 @@ public class Player : MonoBehaviour
 
 	public Transform groundCheck;
 
+	private float lastFootStepPlayed;
+	public float walkTimer;
+
+	public AudioClip footstep;
+
+	private AudioSource source;
+
 	// Use this for initialization
 	void Start () 
 	{
 		rigid = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator>();
+		source = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -48,6 +56,15 @@ public class Player : MonoBehaviour
 		anim.SetFloat("vSpeed", rigid.velocity.y);
 
 		rigid.velocity = new Vector2(horizontal * maxSpeed, rigid.velocity.y);
+
+		if(grounded && Time.time - lastFootStepPlayed > walkTimer)
+		{
+			if(horizontal > 0 || horizontal < 0)
+			{
+				source.PlayOneShot(footstep, 0.2f);
+				lastFootStepPlayed = Time.time;
+			}
+		}
 
 		if(horizontal > 0 && !facingRight)
 		{

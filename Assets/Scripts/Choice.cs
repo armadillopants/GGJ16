@@ -1,13 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Choice : TriggerObject 
+[RequireComponent(typeof(BoxCollider2D))]
+public class Choice : MonoBehaviour 
 {
 	public ChoiceType choiceType;
 
-	public override void OnTriggerEnter2D()
+	private bool triggered = false;
+
+	void OnTriggerEnter2D()
 	{
-		base.OnTriggerEnter2D();
+		if(triggered)
+		{
+			return;
+		}
+
+		triggered = true;
 
 		ChoiceManager.GetInstance().AddChoice((int)choiceType);
 	}

@@ -2,14 +2,22 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class SceneChanger : TriggerObject 
+[RequireComponent(typeof(BoxCollider2D))]
+public class SceneChanger : MonoBehaviour 
 {
 
 	public string level;
 
-	public override void OnTriggerEnter2D()
+	private bool triggered = false;
+
+	void OnTriggerEnter2D()
 	{
-		base.OnTriggerEnter2D();
+		if(triggered)
+		{
+			return;
+		}
+
+		triggered = true;
 
 		StartCoroutine(FadeToSceneChange());
 	}
