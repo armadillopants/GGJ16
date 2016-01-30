@@ -2,22 +2,16 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class SceneChanger : MonoBehaviour 
+public class SceneChanger : TriggerObject 
 {
 
 	public string level;
 
-	private bool triggered = false;
-
-	void OnTriggerEnter2D()
+	public override void OnTriggerEnter2D()
 	{
-		if(triggered)
-		{
-			return;
-		}
+		base.OnTriggerEnter2D();
 
 		StartCoroutine(FadeToSceneChange());
-		triggered = true;
 	}
 
 	IEnumerator FadeToSceneChange()

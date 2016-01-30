@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Choice : MonoBehaviour 
+public class Choice : TriggerObject 
 {
 	public ChoiceType choiceType;
 
-	void OnTriggerEnter2D()
+	public override void OnTriggerEnter2D()
 	{
+		base.OnTriggerEnter2D();
+
 		ChoiceManager.GetInstance().AddChoice((int)choiceType);
 	}
 }
