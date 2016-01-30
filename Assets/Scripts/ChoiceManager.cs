@@ -7,11 +7,16 @@ public class ChoiceManager : MonoBehaviour
 
 	private static ChoiceManager _instance;
 
+	void Awake()
+	{
+		DontDestroyOnLoad(this);
+	}
+
 	public static ChoiceManager GetInstance()
 	{
 		if(_instance == null)
 		{
-			_instance = new ChoiceManager();
+			_instance = GameObject.Find("ChoiceManager").GetComponent<ChoiceManager>();
 		}
 
 		return _instance;

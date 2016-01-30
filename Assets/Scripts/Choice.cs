@@ -3,11 +3,9 @@ using System.Collections;
 
 public class Choice : MonoBehaviour 
 {
-
-	public string choice;
 	public ChoiceType choiceType;
 
-	void OnTriggerEnter2D(Collider2D col)
+	void OnTriggerEnter2D()
 	{
 		ChoiceManager.GetInstance().AddChoice((int)choiceType);
 	}
