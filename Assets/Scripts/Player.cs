@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 	public float maxSpeed = 5f;
 	public float moveForce = 5f;
 	public float jumpForce = 5f;
+	public float groundRadius = 0.2f;
 
 	private Rigidbody2D rigid;
 	private Animator anim;
@@ -27,13 +28,9 @@ public class Player : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-		anim.SetBool("Ground", grounded);
-
-		if(Input.GetButtonDown("Jump") && grounded)
+		if(Input.GetButtonDown("Jump"))
 		{
 			canJump = true;
-			anim.SetBool("Ground", false);
 		}
 	}
 
@@ -41,18 +38,16 @@ public class Player : MonoBehaviour
 	{
 		float horizontal = Input.GetAxis("Horizontal");
 
-		anim.SetFloat("Speed", Mathf.Abs(horizontal));
+		grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius,  1 << LayerMask.NameToLayer("Ground"));
+		anim.SetBool("Ground", grounded);
+
+		if(grounded)
+		{
+			anim.SetFloat("Speed", Mathf.Abs(horizontal));
+		}
 		anim.SetFloat("vSpeed", rigid.velocity.y);
 
-		if(horizontal * rigid.velocity.x < maxSpeed)
-		{
-			rigid.AddForce(Vector2.right * horizontal * moveForce);
-		}
-
-		if(Mathf.Abs(rigid.velocity.x) > maxSpeed)
-		{
-			rigid.velocity = new Vector2(Mathf.Sign(rigid.velocity.x) * maxSpeed, rigid.velocity.y);
-		}
+		rigid.velocity = new Vector2(horizontal * maxSpeed, rigid.velocity.y);
 
 		if(horizontal > 0 && !facingRight)
 		{
@@ -63,12 +58,13 @@ public class Player : MonoBehaviour
 			Flip();
 		}
 
-		if(canJump)
+		if(grounded && canJump)
 		{
+			anim.SetBool("Ground", false);
 			rigid.AddForce(new Vector2(0, jumpForce));
-
-			canJump = false;
 		}
+
+		canJump = false;
 	}
 
 	void Flip()
