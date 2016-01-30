@@ -7,13 +7,10 @@ public class ZoomCamera : MonoBehaviour
 	private float originalPos;
 	private float maxZoom = 12f;
 
-	private bool canZoom = false;
-
-	public float zoomTime = 5f;
-
-	private float lastZoom;
+	public float zoomDuration = 3f;
 
 	Camera cam;
+	private bool triggered = false;
 
 	void Start () 
 	{
@@ -21,52 +18,53 @@ public class ZoomCamera : MonoBehaviour
 		cam = camObject.GetComponent<Camera>();
 
 		originalPos = cam.orthographicSize;
-		lastZoom = originalPos;
 	}
-
-	void Update()
-	{
-		if(canZoom)
-		{
-			if(lastZoom == minZoom)
-			{
-				curZoom = Mathf.Lerp(curZoom, maxZoom, zoomTime * Time.deltaTime);
-				cam.orthographicSize = curZoom;
-
-				if(curZoom == maxZoom)
-				{
-					cam.orthographicSize = maxZoom;
-					lastZoom = maxZoom;
-				}
-			}
-			else if(lastZoom == maxZoom)
-			{
-				curZoom = Mathf.Lerp(curZoom, minZoom, zoomTime * Time.deltaTime);
-				cam.orthographicSize = curZoom;
-
-				if(minZoom - curZoom < Mathf.Epsilon)
-				{
-					cam.orthographicSize = minZoom;
-					lastZoom = minZoom;
-				}
-			}
-		}
-	}
-
 
 	void OnTriggerEnter2D()
 	{
-		if(lastZoom == originalPos)
+		if(triggered)
+		{
+			return;
+		}
+
+		if(cam.orthographicSize == originalPos)
 		{
 			StartCoroutine(ZoomOut());
 		}
-		else if(lastZoom == maxZoom)
+		else if(cam.orthographicSize == maxZoom)
 		{
+			StartCoroutine(ZoomIn());
+		}
+
+		triggered = true;
+	}
+
+	IEnumerator ZoomIn()
+	{
+		float delta = 0f;
+		triggered = false;
+
+		if(cam.orthographicSize <= maxZoom)
+		{
+			while(delta < zoomDuration)
+			{
+				delta += Time.deltaTime;
+				yield return true;
+				cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, originalPos, delta / zoomDuration);
+			}
 		}
 	}
 
 	IEnumerator ZoomOut()
 	{
-		
+		float delta = 0f;
+		triggered = false;
+
+		while(delta < zoomDuration)
+		{
+			delta += Time.deltaTime;
+			yield return true;
+			cam.orthographicSize = Mathf.Lerp(originalPos, maxZoom, delta / zoomDuration);
+		}
 	}
 }
