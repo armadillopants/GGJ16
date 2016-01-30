@@ -45,8 +45,6 @@ public class SceneChanger : MonoBehaviour
 			yield return new WaitForSeconds(Time.deltaTime);
 		}
 
-		Destroy(fade);
-
 		SceneManager.LoadScene(level);
 	}
 }
