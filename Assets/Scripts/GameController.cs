@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour 
 {
@@ -26,6 +27,11 @@ public class GameController : MonoBehaviour
 
 		pauseObject.SetActive(!pauseObject.activeSelf);
 		Time.timeScale = timeScale;
+	}
+
+	public void RestartGame()
+	{
+		SceneManager.LoadScene(0);
 	}
 
 	public void Quit()
