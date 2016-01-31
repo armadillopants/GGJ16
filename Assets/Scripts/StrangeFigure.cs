@@ -54,6 +54,7 @@ public class StrangeFigure : Action
 		textObject.text = "He faced his fear, and walked through the dark alone.";
 
 		Destroy(death);
+		Destroy(this);
 	}
 
 	public override void BadChoice ()
@@ -66,5 +67,6 @@ public class StrangeFigure : Action
 		textObject.text = "He chose not to face this heavy burden";
 
 		Destroy(death);
+		Destroy(this);
 	}
 }
