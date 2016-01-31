@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class SceneChanger : MonoBehaviour 
 {
-
+	public bool restartGame = false;
 	public string level;
 
 	private bool triggered = false;
+
+	public Text textObject;
+	public GameObject[] buttons;
 
 	void OnTriggerEnter2D()
 	{
@@ -45,6 +49,17 @@ public class SceneChanger : MonoBehaviour
 			yield return new WaitForSeconds(Time.deltaTime);
 		}
 
-		SceneManager.LoadScene(level);
+		if(!restartGame)
+		{
+			SceneManager.LoadScene(level);
+		}
+		else
+		{
+			textObject.text = "Thank you for experiencing The Sacrifice.";
+			foreach(GameObject button in buttons)
+			{
+				button.SetActive(true);
+			}
+		}
 	}
 }
