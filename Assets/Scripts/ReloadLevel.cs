@@ -10,6 +10,7 @@ public class ReloadLevel : MonoBehaviour
 	{
 		if(col.gameObject.tag == "Player")
 		{
+			ChoiceManager.GetInstance().choice += 1;
 			SceneManager.LoadScene(level);
 		}
 	}

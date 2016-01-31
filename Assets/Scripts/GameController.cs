@@ -31,6 +31,7 @@ public class GameController : MonoBehaviour
 
 	public void RestartGame()
 	{
+		ChoiceManager.GetInstance().choice = 0;
 		SceneManager.LoadScene(0);
 	}
 
