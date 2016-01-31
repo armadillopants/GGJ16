@@ -19,5 +19,6 @@ public class FinalChoice : MonoBehaviour
 	void PlayerMove()
 	{
 		GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().canMove = true;
+		Destroy(this);
 	}
 }
