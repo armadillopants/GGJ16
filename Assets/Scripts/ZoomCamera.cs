@@ -5,7 +5,7 @@ using System.Collections;
 public class ZoomCamera : MonoBehaviour 
 {
 	private float originalPos;
-	private float maxZoom = 12f;
+	public float maxZoom = 12f;
 
 	public float zoomDuration = 3f;
 

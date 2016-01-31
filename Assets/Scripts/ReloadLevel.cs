@@ -6,8 +6,11 @@ public class ReloadLevel : MonoBehaviour
 {
 	public string level;
 
-	void OnTriggerEnter2D()
+	void OnTriggerEnter2D(Collider2D col)
 	{
-		SceneManager.LoadScene(level);
+		if(col.gameObject.tag == "Player")
+		{
+			SceneManager.LoadScene(level);
+		}
 	}
 }

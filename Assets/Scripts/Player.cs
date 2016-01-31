@@ -22,8 +22,13 @@ public class Player : MonoBehaviour
 	public float walkTimer;
 
 	public AudioClip footstep;
+	public AudioClip jump;
+	public AudioClip landed;
 
 	private AudioSource source;
+
+	public bool canMove = true;
+	private bool wasGrounded;
 
 	// Use this for initialization
 	void Start () 
@@ -44,44 +49,59 @@ public class Player : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		float horizontal = Input.GetAxis("Horizontal");
-
-		grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius,  1 << LayerMask.NameToLayer("Ground"));
-		anim.SetBool("Ground", grounded);
-
-		if(grounded)
+		if(canMove)
 		{
-			anim.SetFloat("Speed", Mathf.Abs(horizontal));
-		}
-		anim.SetFloat("vSpeed", rigid.velocity.y);
+			float horizontal = Input.GetAxis("Horizontal");
 
-		rigid.velocity = new Vector2(horizontal * maxSpeed, rigid.velocity.y);
+			grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius,  1 << LayerMask.NameToLayer("Ground"));
+			anim.SetBool("Ground", grounded);
 
-		if(grounded && Time.time - lastFootStepPlayed > walkTimer)
-		{
-			if(horizontal > 0 || horizontal < 0)
+			if(grounded)
 			{
-				source.PlayOneShot(footstep, 0.2f);
-				lastFootStepPlayed = Time.time;
+				anim.SetFloat("Speed", Mathf.Abs(horizontal));
 			}
-		}
+			anim.SetFloat("vSpeed", rigid.velocity.y);
 
-		if(horizontal > 0 && !facingRight)
-		{
-			Flip();
-		}
-		else if(horizontal < 0 && facingRight)
-		{
-			Flip();
-		}
+			if(!wasGrounded && grounded)
+			{
+				source.PlayOneShot(landed, 0.5f);
+			}
 
-		if(grounded && canJump)
-		{
-			anim.SetBool("Ground", false);
-			rigid.AddForce(new Vector2(0, jumpForce));
-		}
+			rigid.velocity = new Vector2(horizontal * maxSpeed, rigid.velocity.y);
 
-		canJump = false;
+			if(grounded && Time.time - lastFootStepPlayed > walkTimer)
+			{
+				if(horizontal > 0 || horizontal < 0)
+				{
+					source.PlayOneShot(footstep, 0.2f);
+					lastFootStepPlayed = Time.time;
+				}
+			}
+
+			if(horizontal > 0 && !facingRight)
+			{
+				Flip();
+			}
+			else if(horizontal < 0 && facingRight)
+			{
+				Flip();
+			}
+
+			if(grounded && canJump)
+			{
+				anim.SetBool("Ground", false);
+				rigid.AddForce(new Vector2(0, jumpForce));
+				source.PlayOneShot(jump, 0.7f);
+			}
+
+			canJump = false;
+
+			wasGrounded = grounded;
+		}
+		else
+		{
+			anim.SetFloat("Speed", 0);
+		}
 	}
 
 	void Flip()
