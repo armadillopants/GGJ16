@@ -7,6 +7,8 @@ public class PushGuy : Action
 
 	public float force;
 
+	public Sprite sprite;
+
 	void Start()
 	{
 		rigid = GetComponent<Rigidbody2D>();
@@ -15,6 +17,8 @@ public class PushGuy : Action
 	public override void BadChoice ()
 	{
 		base.BadChoice();
+
+		GetComponent<SpriteRenderer>().sprite = sprite;
 
 		rigid.constraints = RigidbodyConstraints2D.None;
 		rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
